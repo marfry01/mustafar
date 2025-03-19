@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Number Guessing Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        input {
+            padding: 5px;
+            margin: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #message {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Number Guessing Game</h1>
+        <p>Guess a number between 1 and 100</p>
+        <input type="number" id="guessInput" placeholder="Enter your guess">
+        <button onclick="checkGuess()">Submit Guess</button>
+        <p id="message"></p>
+        <p>Attempts: <span id="attempts">0</span></p>
+        <button onclick="resetGame()" style="background-color: #2196F3">New Game</button>
+    </div>
+
+    <script>
+        let randomNumber = Math.floor(Math.random() * 100) + 1;
+        let attempts = 0;
+
+        function checkGuess() {
+            const guess = parseInt(document.getElementById('guessInput').value);
+            const message = document.getElementById('message');
+            attempts++;
+            document.getElementById('attempts').textContent = attempts;
+
+            if (isNaN(guess) || guess < 1 || guess > 100) {
+                message.textContent = 'Please enter a valid number between 1 and 100!';
+                message.style.color = 'red';
+                return;
+            }
+
+            if (guess === randomNumber) {
+                message.textContent = `Congratulations! You got it in ${attempts} attempts!`;
+                message.style.color = 'green';
+                document.getElementById('guessInput').disabled = true;
+            } else if (guess < randomNumber) {
+                message.textContent = 'Too low! Try a higher number.';
+                message.style.color = 'blue';
+            } else {
+                message.textContent = 'Too high! Try a lower number.';
+                message.style.color = 'blue';
+            }
+
+            document.getElementById('guessInput').value = '';
+        }
+
+        function resetGame() {
+            randomNumber = Math.floor(Math.random() * 100) + 1;
+            attempts = 0;
+            document.getElementById('attempts').textContent = attempts;
+            document.getElementById('message').textContent = '';
+            document.getElementById('guessInput').disabled = false;
+            document.getElementById('guessInput').value = '';
+        }
+
+        // Allow Enter key to submit guess
+        document.getElementById('guessInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkGuess();
+            }
+        });
+    </script>
+</body>
+</html>
+​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
