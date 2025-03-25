@@ -1,0 +1,185 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: 'Roboto', 'Arial', sans-serif;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
+}
+
+video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+}
+
+#error-message {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #f1f1f1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+#redirect-box, #error-box {
+    background-color: #fff;
+    width: 450px;
+    max-width: 90%;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.youtube-header {
+    background-color: #ff0000;
+    color: #fff;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.youtube-error-header {
+    background-color: #606060;
+}
+
+.youtube-logo {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.youtube-content {
+    padding: 20px;
+    text-align: center;
+}
+
+.youtube-content h2 {
+    color: #030303;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.youtube-content p {
+    color: #606060;
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.progress-container {
+    width: 100%;
+    height: 8px;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    margin: 15px 0;
+}
+
+#progress-bar {
+    width: 0;
+    height: 100%;
+    background: linear-gradient(to right, #ff0000, #cc0000);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+#progress-percentage {
+    color: #606060;
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.instruction {
+    margin-top: 15px;
+    font-size: 13px;
+}
+
+.instruction a {
+    color: #065fd4;
+    text-decoration: none;
+    display: block;
+}
+
+.instruction a:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.spinner {
+    margin: 15px auto 0;
+    width: 30px;
+    height: 30px;
+    border: 3px solid #e0e0e0;
+    border-top: 3px solid #ff0000;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.youtube-content input {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+    margin: 15px auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    display: block;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.youtube-content input:focus {
+    border-color: #ff0000;
+}
+
+#error-box.hidden {
+    display: none;
+}
+
+.error-cross {
+    display: block;
+    color: #606060;
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+#error-box .youtube-content h2 {
+    color: #606060;
+}
+
+#error-box .youtube-content p {
+    color: #606060;
+}
+
+#error-box .instruction a {
+    color: #ff0000;
+}
+
+#reference-link {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 12px;
+    text-decoration: none;
+    z-index: 5;
+    display: none;
+}
+
+#reference-link:hover {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: underline;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
