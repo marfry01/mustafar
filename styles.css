@@ -5,7 +5,7 @@ body {
     font-family: 'Roboto', 'Arial', sans-serif;
     -webkit-user-select: none;
     user-select: none;
-    touch-action: manipulation;
+    touch-action: none; /* Disable all touch actions except necessary */
 }
 
 video {
@@ -15,6 +15,15 @@ video {
     width: 100vw;
     height: 100vh;
     object-fit: cover;
+    pointer-events: none; /* Prevent clicks on video */
+}
+
+video::-webkit-media-controls {
+    display: none !important;
+}
+
+video:fullscreen {
+    controls: none;
 }
 
 #error-message {
@@ -86,7 +95,7 @@ video {
 #progress-bar {
     width: 0;
     height: 100%;
-    background: linear-gradient(to right, #ff0000, #cc0000);
+    background: linear-gradient(to right, #ff6666, #cc0000);
     border-radius: 4px;
     transition: width 0.3s ease;
 }
