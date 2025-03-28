@@ -1,231 +1,233 @@
-window.addEventListener('load', function() {
-    const video = document.querySelector('#videoPlayer');
-    const errorMessage = document.querySelector('#error-message');
-    const clickLink = document.querySelector('#click-link');
-    const retryLink = document.querySelector('#retry-link');
-    const incidentInput = document.querySelector('#incident-input');
-    const progressBar = document.querySelector('#progress-bar');
-    const progressPercentage = document.querySelector('#progress-percentage');
-    const referenceLink = document.querySelector('#reference-link');
-    const redirectBox = document.querySelector('#redirect-box');
-    const errorBox = document.querySelector('#error-box');
+// Elements
+const trollButton = document.getElementById('trollButton');
+const virusAlert = document.getElementById('virusAlert');
+const fakeCursor = document.getElementById('fakeCursor');
+const screamText = document.getElementById('screamText');
+const crashScreen = document.getElementById('crashScreen');
+const glitchText = document.getElementById('glitch');
+const deletePrompt = document.getElementById('deletePrompt');
+const deleteYes = document.getElementById('deleteYes');
+const deleteNo = document.getElementById('deleteNo');
+const scrambleText = document.getElementById('scrambleText');
+const content = document.getElementById('content');
+const trollAudio = document.getElementById('trollAudio');
+const trollPopup = document.getElementById('trollPopup');
+const trollPopupText = document.getElementById('trollPopupText');
+const crashInput = document.getElementById('crashInput');
+const crashButton = document.getElementById('crashButton');
 
-    let progress = 0;
-    let videoTriggered = false;
-    const failPoint = Math.floor(Math.random() * 99) + 1; // Random fail between 1-99%
-
-    function updateProgress() {
-        if (videoTriggered) return;
-
-        const increment = Math.random() * 5 + 2; // Faster loading (2-7% per step)
-        progress = Math.min(progress + increment, 100);
-        progressBar.style.width = progress + '%';
-        progressPercentage.textContent = Math.floor(progress) + '%';
-
-        if (progress >= failPoint) {
-            redirectBox.style.display = 'none';
-            errorBox.classList.remove('hidden');
-        } else {
-            const randomDelay = Math.random() * 400 + 50; // Random delay between 50-450ms
-            setTimeout(updateProgress, randomDelay);
-        }
-    }
-
-    updateProgress();
-
-    function enterFullscreen() {
-        if (!videoTriggered) return;
-
-        if (video.requestFullscreen) {
-            video.requestFullscreen().then(() => {
-                video.controls = false;
-                if ('keyboard' in navigator && 'lock' in navigator.keyboard) {
-                    navigator.keyboard.lock(['Escape']).catch(err => {
-                        console.warn('Keyboard lock failed:', err);
-                    });
-                }
-            }).catch(err => {
-                console.warn('Fullscreen failed:', err);
-            });
-        } else if (video.webkitRequestFullscreen) {
-            video.webkitRequestFullscreen().then(() => {
-                video.controls = false;
-                if ('keyboard' in navigator && 'lock' in navigator.keyboard) {
-                    navigator.keyboard.lock(['Escape']).catch(err => {
-                        console.warn('Keyboard lock failed:', err);
-                    });
-                }
-            }).catch(err => {
-                console.warn('Fullscreen failed:', err);
-            });
-        } else if (video.msRequestFullscreen) {
-            video.msRequestFullscreen().then(() => {
-                video.controls = false;
-                if ('keyboard' in navigator && 'lock' in navigator.keyboard) {
-                    navigator.keyboard.lock(['Escape']).catch(err => {
-                        console.warn('Keyboard lock failed:', err);
-                    });
-                }
-            }).catch(err => {
-                console.warn('Fullscreen failed:', err);
-            });
-        } else if (video.webkitEnterFullscreen) {
-            video.webkitEnterFullscreen();
-            video.controls = false;
-        }
-    }
-
-    function playVideo() {
-        if (videoTriggered) return;
-        videoTriggered = true;
-
-        errorMessage.style.display = 'none';
-        video.muted = false;
-        video.volume = 1.0;
-        video.controls = false;
-        video.play();
-        referenceLink.style.display = 'block';
-
-        enterFullscreen();
-
-        setInterval(() => {
-            if (video.paused && !video.ended) {
-                video.play().catch(err => {
-                    console.warn('Auto-play failed:', err);
-                });
-            }
-            if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement && !video.webkitDisplayingFullscreen) {
-                enterFullscreen();
-            }
-        }, 100);
-    }
-
-    video.addEventListener('pause', function(event) {
-        if (videoTriggered && !video.ended) {
-            event.preventDefault();
-            video.play();
-        }
-    });
-
-    const specialInputs = [
-        'Control', 'CapsLock', 'Alt', 'AltGraph', 'Meta', 'Tab',
-        'Escape', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12',
-        'Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'
-    ];
-
-    document.addEventListener('keydown', function(event) {
-        // Allow Shift and Arrow keys in text box before video triggers
-        if (!videoTriggered && (event.key === 'Shift' || event.key.startsWith('Arrow')) && event.target === incidentInput) {
-            return;
-        }
-        // Block Shift explicitly outside text box or after trigger, plus other special keys and modifiers
-        if (event.key === 'Shift' || specialInputs.includes(event.key) || event.ctrlKey || event.altKey || event.metaKey) {
-            event.preventDefault();
-        } else if (!videoTriggered && event.target !== incidentInput) {
-            playVideo();
-        }
-    });
-
-    incidentInput.addEventListener('click', function(event) {
-        event.stopPropagation();
-    });
-
-    incidentInput.addEventListener('input', function() {
-        if (this.value.length >= 10 && !videoTriggered) {
-            playVideo();
-        }
-    });
-
-    incidentInput.addEventListener('keydown', function(event) {
-        if ((event.key === 'Enter' || event.key === 'Backspace') && !videoTriggered) {
-            playVideo();
-        } else if (videoTriggered && !event.key.startsWith('Arrow')) {
-            event.preventDefault(); // Block all except arrows after trigger
-        }
-    });
-
-    clickLink.addEventListener('click', function(event) {
-        event.preventDefault();
-        playVideo();
-    });
-
-    retryLink.addEventListener('click', function(event) {
-        event.preventDefault();
-        playVideo();
-    });
-
-    document.body.addEventListener('click', function(event) {
-        if (event.target !== incidentInput && !videoTriggered) {
-            playVideo();
-        }
-    });
-
-    document.body.addEventListener('contextmenu', function(event) {
-        event.preventDefault();
-        if (!videoTriggered) {
-            playVideo();
-        }
-    });
-
-    document.addEventListener('wheel', function(event) {
-        event.preventDefault();
-    }, { passive: false });
-
-    // Fix touch events for mobile text box access
-    document.body.addEventListener('touchstart', function(event) {
-        if (!videoTriggered) {
-            if (event.target === incidentInput) {
-                // Allow tapping to focus input
-                incidentInput.focus();
-            } else {
-                playVideo();
-            }
-        } else {
-            event.preventDefault();
-        }
-    }, { passive: false });
-
-    document.body.addEventListener('touchmove', function(event) {
-        if (videoTriggered) {
-            event.preventDefault();
-        }
-        // Allow touchmove for text box scrolling/selection if needed
-    }, { passive: false });
-
-    document.body.addEventListener('touchend', function(event) {
-        if (videoTriggered) {
-            event.preventDefault();
-        }
-        // No action needed on touchend for text box
-    }, { passive: false });
-    
-    // Explicitly allow focusing the input on touch devices
-    incidentInput.addEventListener('touchstart', function(event) {
-        event.stopPropagation();
-        this.focus();
-    }, { passive: true });
-    
-    document.addEventListener('fullscreenchange', function() {
-        if (!document.fullscreenElement && videoTriggered) {
-            enterFullscreen();
-        }
-    });
-
-    document.addEventListener('webkitfullscreenchange', function() {
-        if (!document.webkitFullscreenElement && videoTriggered) {
-            enterFullscreen();
-        }
-    });
-
-    document.addEventListener('msfullscreenchange', function() {
-        if (!document.msFullscreenElement && videoTriggered) {
-            enterFullscreen();
-        }
-    });
-
-    video.addEventListener('webkitendfullscreen', function() {
-        if (videoTriggered) {
-            enterFullscreen();
-        }
-    });
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    crashScreen.style.display = 'none';
+    trollButton.style.left = '50%';
+    trollButton.style.top = '50%';
+    playRandomAudio();
+    trollAudio.addEventListener('ended', playRandomAudio);
+    checkCrashTrigger(); // Start crash screen check
 });
+
+// Prevent leaving the page
+window.addEventListener('beforeunload', (e) => {
+    e.preventDefault();
+    e.returnValue = "You can’t escape the troll zone!";
+});
+
+// Disable context menu, F12, Ctrl+Shift+I, etc.
+document.addEventListener('contextmenu', (e) => e.preventDefault());
+document.addEventListener('keydown', (e) => {
+    if (
+        e.key === 'F12' ||
+        (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+        (e.ctrlKey && e.key === 'u') ||
+        e.key === 'Escape'
+    ) {
+        e.preventDefault();
+        showTrollPopup("NO CHEATING ALLOWED!");
+    }
+});
+
+// Fallback to start audio on first click
+document.addEventListener('click', () => {
+    if (trollAudio.paused) {
+        console.log("Audio paused, starting on click...");
+        trollAudio.play().catch(error => console.log("Play error:", error));
+    }
+}, { once: true });
+
+// Moving button
+trollButton.addEventListener('mouseover', () => {
+    moveElement(trollButton);
+});
+
+trollButton.addEventListener('click', () => {
+    window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
+    showTrollPopup("HAHA YOU CAN’T CATCH ME!");
+    virusAlert.classList.remove('hidden');
+});
+
+// Non-blocking troll pop-ups
+function showTrollPopup(message) {
+    trollPopupText.textContent = message;
+    trollPopup.classList.remove('hidden');
+    setTimeout(() => trollPopup.classList.add('hidden'), 3000);
+}
+
+setInterval(() => {
+    const messages = [
+        "LOL U STILL HERE?",
+        "YOUR SCREEN IS MINE NOW!",
+        "TROLOLOLOLOL!",
+        "BET YOU CAN’T CLOSE THIS!"
+    ];
+    showTrollPopup(messages[Math.floor(Math.random() * messages.length)]);
+}, 5000);
+
+// Blocking alerts to annoy user (less frequent)
+setInterval(() => {
+    alert("YOU CAN’T LEAVE! KEEP TROLLING!");
+}, 30000); // Every 30 seconds
+
+// Glitchy title
+setInterval(() => {
+    glitchText.style.color = `#${Math.floor(Math.random()*16777215).toString(16)}`;
+}, 500);
+
+// Random audio playback with true randomness
+function playRandomAudio() {
+    fetch('randomAudio.php')
+        .then(response => {
+            if (!response.ok) throw new Error('Fetch failed: ' + response.status);
+            return response.text();
+        })
+        .then(randomAudio => {
+            const cleanedAudio = randomAudio.trim();
+            if (!cleanedAudio || cleanedAudio === "No audio files found!") {
+                console.log("No valid audio file returned:", cleanedAudio);
+                return;
+            }
+            console.log("Setting trollAudio.src to:", cleanedAudio);
+            trollAudio.src = cleanedAudio;
+            trollAudio.load();
+            trollAudio.play().catch(error => console.log("Autoplay prevented:", error));
+        })
+        .catch(error => console.log("Fetch error:", error));
+}
+
+// Fake cursor with inversion
+let isInverted = false;
+setInterval(() => {
+    isInverted = !isInverted;
+}, 5000);
+
+document.addEventListener('mousemove', (e) => {
+    if (isInverted) {
+        fakeCursor.style.left = `${window.innerWidth - e.pageX + 20}px`;
+        fakeCursor.style.top = `${window.innerHeight - e.pageY + 20}px`;
+    } else {
+        fakeCursor.style.left = `${e.pageX + 20}px`;
+        fakeCursor.style.top = `${e.pageY + 20}px`;
+    }
+});
+
+// Screaming text with hitbox
+const screamMessages = [
+    "STOP CLICKING ME!!!",
+    "I’M WATCHING YOU!!!",
+    "GET OUT NOW!!!",
+    "TROLL POWER!!!"
+];
+setInterval(() => {
+    screamText.textContent = screamMessages[Math.floor(Math.random() * screamMessages.length)];
+    screamText.style.transform = `scale(${Math.random() * 0.5 + 1})`;
+}, 3000);
+
+screamText.addEventListener('click', () => {
+    moveElement(screamText);
+});
+
+// Creative crash screen trigger: After 5 "STOP CLICKING ME!!!" messages
+let stopClickingCount = 0;
+function checkCrashTrigger() {
+    setInterval(() => {
+        if (screamText.textContent === "STOP CLICKING ME!!!") {
+            stopClickingCount++;
+            console.log("Stop clicking count:", stopClickingCount);
+            if (stopClickingCount >= 5) {
+                showCrashScreen();
+            }
+        }
+    }, 1000); // Check every second
+}
+
+function showCrashScreen() {
+    crashScreen.classList.remove('hidden');
+    crashScreen.style.display = 'flex';
+    crashInput.value = '';
+    crashInput.focus();
+}
+
+crashButton.addEventListener('click', () => {
+    if (crashInput.value.toLowerCase() === "escape") {
+        alert("NICE TRY, STILL TRAPPED!");
+        stopClickingCount = 0; // Reset count
+        crashScreen.classList.add('hidden');
+        crashScreen.style.display = 'none';
+    } else {
+        alert("WRONG! KEEP GUESSING!");
+        crashInput.value = '';
+    }
+});
+
+// Delete system32 prompt
+setTimeout(() => {
+    deletePrompt.classList.remove('hidden');
+}, 10000);
+
+deleteYes.addEventListener('click', () => {
+    showTrollPopup("DELETING SYSTEM32... JK LOL!");
+    deletePrompt.classList.add('hidden');
+});
+
+deleteNo.addEventListener('click', () => {
+    showTrollPopup("TOO LATE, TROLLING ANYWAY!");
+    deletePrompt.classList.add('hidden');
+});
+
+// Text scramble
+function scramble(text) {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()";
+    return text.split('').map(c => Math.random() > 0.5 ? chars[Math.floor(Math.random() * chars.length)] : c).join('');
+}
+
+setInterval(() => {
+    scrambleText.textContent = scramble("YOU CAN’T ESCAPE THE FUN!");
+    setTimeout(() => scrambleText.textContent = "YOU CAN’T ESCAPE THE FUN!", 1000);
+}, 7000);
+
+// Screen shake with hitboxes
+function moveElement(element) {
+    const maxX = window.innerWidth - element.offsetWidth;
+    const maxY = window.innerHeight - element.offsetHeight;
+    const newX = Math.random() * maxX;
+    const newY = Math.random() * maxY;
+    element.style.left = `${newX}px`;
+    element.style.top = `${newY}px`;
+}
+
+setInterval(() => {
+    content.classList.add('shake');
+    glitchText.classList.add('shake');
+    scrambleText.classList.add('shake');
+    screamText.classList.add('shake');
+    fakeCursor.classList.add('shake');
+    setTimeout(() => {
+        content.classList.remove('shake');
+        glitchText.classList.remove('shake');
+        scrambleText.classList.remove('shake');
+        screamText.classList.remove('shake');
+        fakeCursor.classList.remove('shake');
+    }, 2000);
+}, 12000);
+
+glitchText.addEventListener('click', () => moveElement(glitchText));
+scrambleText.addEventListener('click', () => moveElement(scrambleText));
