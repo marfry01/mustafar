@@ -1,4 +1,3 @@
-// Elements
 const trollButton = document.getElementById('trollButton');
 const virusAlert = document.getElementById('virusAlert');
 const fakeCursor = document.getElementById('fakeCursor');
@@ -16,7 +15,6 @@ const trollPopupText = document.getElementById('trollPopupText');
 const crashInput = document.getElementById('crashInput');
 const crashButton = document.getElementById('crashButton');
 
-// Initialize
 document.addEventListener('DOMContentLoaded', () => {
     crashScreen.style.display = 'none';
     trollButton.style.left = '50%';
@@ -26,13 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
     checkCrashTrigger(); // Start crash screen check
 });
 
-// Prevent leaving the page
 window.addEventListener('beforeunload', (e) => {
     e.preventDefault();
     e.returnValue = "You can’t escape the troll zone!";
 });
 
-// Disable context menu, F12, Ctrl+Shift+I, etc.
 document.addEventListener('contextmenu', (e) => e.preventDefault());
 document.addEventListener('keydown', (e) => {
     if (
@@ -46,7 +42,6 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// Fallback to start audio on first click
 document.addEventListener('click', () => {
     if (trollAudio.paused) {
         console.log("Audio paused, starting on click...");
@@ -54,7 +49,6 @@ document.addEventListener('click', () => {
     }
 }, { once: true });
 
-// Moving button
 trollButton.addEventListener('mouseover', () => {
     moveElement(trollButton);
 });
@@ -82,7 +76,6 @@ setInterval(() => {
     showTrollPopup(messages[Math.floor(Math.random() * messages.length)]);
 }, 5000);
 
-// Blocking alerts to annoy user (less frequent)
 setInterval(() => {
     alert("YOU CAN’T LEAVE! KEEP TROLLING!");
 }, 30000); // Every 30 seconds
@@ -92,7 +85,6 @@ setInterval(() => {
     glitchText.style.color = `#${Math.floor(Math.random()*16777215).toString(16)}`;
 }, 500);
 
-// Random audio playback with true randomness
 function playRandomAudio() {
     fetch('randomAudio.php')
         .then(response => {
@@ -113,7 +105,6 @@ function playRandomAudio() {
         .catch(error => console.log("Fetch error:", error));
 }
 
-// Fake cursor with inversion
 let isInverted = false;
 setInterval(() => {
     isInverted = !isInverted;
@@ -129,7 +120,6 @@ document.addEventListener('mousemove', (e) => {
     }
 });
 
-// Screaming text with hitbox
 const screamMessages = [
     "STOP CLICKING ME!!!",
     "I’M WATCHING YOU!!!",
@@ -145,7 +135,6 @@ screamText.addEventListener('click', () => {
     moveElement(screamText);
 });
 
-// Creative crash screen trigger: After 5 "STOP CLICKING ME!!!" messages
 let stopClickingCount = 0;
 function checkCrashTrigger() {
     setInterval(() => {
@@ -178,7 +167,6 @@ crashButton.addEventListener('click', () => {
     }
 });
 
-// Delete system32 prompt
 setTimeout(() => {
     deletePrompt.classList.remove('hidden');
 }, 10000);
@@ -193,7 +181,6 @@ deleteNo.addEventListener('click', () => {
     deletePrompt.classList.add('hidden');
 });
 
-// Text scramble
 function scramble(text) {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()";
     return text.split('').map(c => Math.random() > 0.5 ? chars[Math.floor(Math.random() * chars.length)] : c).join('');
@@ -204,7 +191,7 @@ setInterval(() => {
     setTimeout(() => scrambleText.textContent = "YOU CAN’T ESCAPE THE FUN!", 1000);
 }, 7000);
 
-// Screen shake with hitboxes
+
 function moveElement(element) {
     const maxX = window.innerWidth - element.offsetWidth;
     const maxY = window.innerHeight - element.offsetHeight;
